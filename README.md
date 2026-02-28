@@ -14,3 +14,13 @@ Optimization: Added SQL indexes on PULocationID and trip_distance to speed up an
 
 Assumptions
 Used int? (nullable) for passenger_count because raw CSV data often contains missing values, which would otherwise crash the program.
+
+
+Handling a 10GB File
+If the file was 10GB, I would change my approach:
+
+Don't Load Everything: Instead of putting the whole file into a List, I would read it one line at a time (Streaming).
+
+Upload in Batches: I would send the data to SQL in "chunks" of 50,000 rows. This keeps the memory usage low and stable.
+
+Let SQL Handle Duplicates: At that scale, checking for duplicates in C# would be too slow and heavy. I would upload everything to a "temporary table" in SQL first and use a SQL query to delete the duplicates.
